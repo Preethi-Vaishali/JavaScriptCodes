@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <!-- Change <p> to <input> for capturing input events -->
+    <input id="searchBox" type="text" placeholder="Type here..." />
+    <script>
+        // Debounce function
+        function debounce(a, b) {
+            let debounceTimer;
+            return function (...args) {
+                const context = this;
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => a.apply(context, args), b);
+            };
+        }
+
+        // Example usage: Debouncing an API call on input change
+        const fetchData = () => {
+            console.log("Fetching data...");
+        };
+
+       // const debouncedFetchData = debounce(fetchData, 5000);  // 1000ms (1 second) delay
+
+        // Now it will work with the input element
+        const inp = document.getElementById("searchBox");
+        inp.addEventListener("input", debounce(fetchData, 5000));
+
+    </script>
+</body>
+
+</html>

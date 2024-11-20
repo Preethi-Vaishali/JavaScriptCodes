@@ -24,5 +24,4 @@ function findLargestElement(nestedArray) {
     [4, 8, 6]
   ];
   
-  const largest = findLargestElement(nestedArray);
-  console.log(largest);  
+  console.log(findLargestElement(nestedArray));  

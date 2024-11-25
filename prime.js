@@ -11,6 +11,4 @@ function isPrime(num) {
     return true; 
   
   } 
-
-  const a = 6;
-  console.log(isPrime(a));
+  console.log(isPrime(8));

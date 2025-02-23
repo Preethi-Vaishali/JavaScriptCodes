@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Operation with Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    form {
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+    .actions button {
+      margin-right: 5px;
+    }
+    .error {
+      color: red;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>CRUD Operation with Validation</h1>
+  
+  <form id="crudForm">
+    <div>
+      <label>
+        Name:
+        <input type="text" id="name" required>
+      </label>
+      <span class="error" id="nameError"></span>
+    </div>
+    <div>
+      <label>
+        Age:
+        <input type="text" id="age" required>
+      </label>
+      <span class="error" id="ageError"></span>
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Data rows will be added here -->
+    </tbody>
+  </table>
+
+  <script>
+    const form = document.getElementById('crudForm');
+    const tableBody = document.querySelector('#dataTable tbody');
+    const nameField = document.getElementById('name');
+    const ageField = document.getElementById('age');
+    const nameError = document.getElementById('nameError');
+    const ageError = document.getElementById('ageError');
+
+    // Form submission event
+    form.addEventListener('submit', function(event) {
+      event.preventDefault();
+      const name = nameField.value.trim();
+      const age = ageField.value.trim();
+
+      let isValid = true;
+
+      // Validate Name
+      if (!/^[a-zA-Z\s]+$/.test(name)) {
+        nameError.textContent = "Name should contain only letters.";
+        isValid = false;
+      } else {
+        nameError.textContent = "";
+      }
+
+      // Validate Age
+      if (!/^\d+$/.test(age)) {
+        ageError.textContent = "Age should contain only numbers.";
+        isValid = false;
+      } else {
+        ageError.textContent = "";
+      }
+
+      if (isValid) {
+        addRow(name, age);
+        form.reset();
+      }
+    });
+
+    // Add row to the table
+    function addRow(name, age) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${name}</td>
+        <td>${age}</td>
+        <td class="actions">
+          <button onclick="editRow(this)">Edit</button>
+          <button onclick="deleteRow(this)">Delete</button>
+        </td>
+      `;
+      tableBody.appendChild(row);
+    }
+
+    // Delete row
+    function deleteRow(button) {
+      const row = button.closest('tr');
+      row.remove();
+    }
+
+    // Edit row
+    function editRow(button) {
+      const row = button.closest('tr');
+      const name = row.children[0].textContent;
+      const age = row.children[1].textContent;
+
+      nameField.value = name;
+      ageField.value = age;
+
+      row.remove();
+    }
+
+    // Prevent invalid input in Name field
+    nameField.addEventListener('input', function() {
+      if (/[^a-zA-Z\s]/.test(this.value)) {
+        this.value = this.value.replace(/[^a-zA-Z\s]/g, '');
+        nameError.textContent = "Only letters are allowed.";
+      } else {
+        nameError.textContent = "";
+      }
+    });
+
+    // Prevent invalid input in Age field
+    ageField.addEventListener('input', function() {
+      if (/[^0-9]/.test(this.value)) {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        ageError.textContent = "Only numbers are allowed.";
+      } else {
+        ageError.textContent = "";
+      }
+    });
+  </script>
+
+</body>
+</html>
